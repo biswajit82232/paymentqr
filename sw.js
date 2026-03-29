@@ -1,5 +1,5 @@
 /* Service worker — offline-first; bump CACHE after each deploy */
-var CACHE = "bph-pwa-v5";
+var CACHE = "bph-pwa-v10";
 
 /* Absolute URLs so precache works on GitHub Pages (e.g. /your-repo/) */
 var ROOT = new URL("./", self.location.href).href;
