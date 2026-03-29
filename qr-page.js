@@ -3,7 +3,6 @@
   if (!B || typeof QRCode === "undefined") return;
 
   var data = B.readSessionQr();
-  var errBox = document.getElementById("qrViewError");
   var mainBox = document.getElementById("qrViewMain");
   var qrHost = document.getElementById("qrHost");
   var qrMeta = document.getElementById("qrMeta");
@@ -126,7 +125,7 @@
   }
 
   if (!data) {
-    errBox.hidden = false;
+    window.location.replace("index.html");
     return;
   }
 

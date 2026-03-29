@@ -7,10 +7,17 @@
   var amountEl = document.getElementById("amount");
   var txnNote = document.getElementById("txnNote");
   var errEl = document.getElementById("err");
+  var btnClear = document.getElementById("btnClear");
+  var offlineBar = document.getElementById("offlineBar");
 
   function showErr(msg) {
     errEl.textContent = msg;
     errEl.hidden = !msg;
+  }
+
+  function syncOfflineBar() {
+    if (!offlineBar) return;
+    offlineBar.hidden = navigator.onLine;
   }
 
   function fillSelect() {
@@ -34,6 +41,21 @@
     });
     if (cur && list.some(function (a) { return a.vpa === cur; })) {
       selVpa.value = cur;
+    }
+  }
+
+  function applyLastForm() {
+    var last = B.loadLastForm();
+    if (!last) return;
+    var list = B.loadAccounts();
+    if (last.vpa && list.some(function (a) { return a.vpa === last.vpa; })) {
+      selVpa.value = last.vpa;
+    }
+    if (last.amount && B.normalizeAmount(last.amount)) {
+      amountEl.value = last.amount;
+    }
+    if (typeof last.note === "string") {
+      txnNote.value = last.note;
     }
   }
 
@@ -62,6 +84,8 @@
     var tr = B.genTr();
     var uri = B.buildUpiUri(vpa, pn, am, tn, tr);
 
+    B.saveLastForm(vpa, amountEl.value.trim(), tn);
+
     var ok = B.storeSessionQr({
       uri: uri,
       amount: am,
@@ -79,6 +103,38 @@
     goToQrPage();
   });
 
-  window.addEventListener("pageshow", fillSelect);
+  document.querySelectorAll(".quick-chip").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var v = btn.getAttribute("data-amt");
+      if (v) {
+        amountEl.value = v + ".00";
+        showErr("");
+        amountEl.focus();
+      }
+    });
+  });
+
+  if (btnClear) {
+    btnClear.addEventListener("click", function () {
+      amountEl.value = "";
+      txnNote.value = "";
+      showErr("");
+      if (selVpa.options.length && !selVpa.disabled) {
+        selVpa.selectedIndex = 0;
+      }
+      amountEl.focus();
+    });
+  }
+
+  window.addEventListener("online", syncOfflineBar);
+  window.addEventListener("offline", syncOfflineBar);
+
+  window.addEventListener("pageshow", function () {
+    fillSelect();
+    applyLastForm();
+    syncOfflineBar();
+  });
   fillSelect();
+  applyLastForm();
+  syncOfflineBar();
 })();

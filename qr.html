@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#ffffff" />
+  <meta name="theme-color" content="#0f766e" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="application-name" content="Payment QR" />
@@ -13,18 +13,13 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <main class="app">
-    <div class="app-inner">
+  <main class="app app--qr">
+    <div class="app-inner app-inner--qr">
       <nav class="top-nav top-nav--settings" aria-label="Main">
         <a href="index.html" class="top-nav-link">← Back</a>
         <span class="top-nav-title">Payment QR</span>
         <span class="top-nav-spacer" aria-hidden="true"></span>
       </nav>
-
-      <div id="qrViewError" class="panel qr-view-error" hidden>
-        <p class="qr-view-error-text">No QR loaded. Create one from the home screen.</p>
-        <a href="index.html" class="btn btn-primary btn-block">Go to Payment QR</a>
-      </div>
 
       <div id="qrViewMain" class="qr-view-main" hidden>
         <div class="qr-panel qr-panel--page">
@@ -40,7 +35,7 @@
           <p class="qr-caption qr-caption--amount" id="qrMeta" aria-live="polite"></p>
           <div class="qr-actions">
             <button type="button" id="btnShare" class="btn btn-outline btn-block btn-dl">Share</button>
-            <button type="button" id="btnDl" class="btn btn-outline btn-block btn-dl">Download PNG</button>
+            <button type="button" id="btnDl" class="btn btn-outline btn-block btn-dl">Download</button>
           </div>
         </div>
       </div>

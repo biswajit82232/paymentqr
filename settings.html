@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#ffffff" />
+  <meta name="theme-color" content="#0f766e" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="application-name" content="Payment QR" />
@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+  <div id="offlineBar" class="offline-bar" hidden role="status">You’re offline — changes save on this device only.</div>
   <main class="app">
     <div class="app-inner">
       <nav class="top-nav top-nav--settings" aria-label="Main">
@@ -23,13 +24,13 @@
 
       <header class="hero hero--compact">
         <h1 class="hero-title">Shop settings</h1>
-        <p class="hero-lede">Payee name and saved UPI IDs used when you create payment QR codes.</p>
+        <p class="hero-sub">Payee name and UPI IDs used when you create payment QR codes.</p>
       </header>
 
       <section class="panel" aria-labelledby="payee-heading">
         <div class="panel-head">
           <h2 id="payee-heading" class="panel-title">Payee display</h2>
-          <p class="panel-desc">This name appears in the customer’s UPI app when they scan your QR.</p>
+          <p class="panel-desc">Shown in the customer’s UPI app when they scan your QR.</p>
         </div>
         <label class="field">
           <span class="field-label">Name on payer’s screen</span>
@@ -41,7 +42,7 @@
       <section class="panel" aria-labelledby="accounts-heading">
         <div class="panel-head">
           <h2 id="accounts-heading" class="panel-title">Saved UPI IDs</h2>
-          <p class="panel-desc">One entry per bank or UPI ID. On the QR screen you choose which account receives the payment.</p>
+          <p class="panel-desc">One entry per bank or UPI ID. Pick which one receives payment on the QR screen.</p>
         </div>
         <div class="accounts" id="accounts"></div>
         <div class="add-block">
@@ -54,6 +55,20 @@
           <button type="button" id="btnAdd" class="btn btn-outline btn-block">Add account</button>
         </div>
         <p class="feedback feedback--error" id="err" hidden role="alert"></p>
+      </section>
+
+      <section class="panel" aria-labelledby="backup-heading">
+        <div class="panel-head">
+          <h2 id="backup-heading" class="panel-title">Backup</h2>
+          <p class="panel-desc">Save a file to transfer settings to another phone or browser. Keep the file private.</p>
+        </div>
+        <div class="backup-row">
+          <button type="button" id="btnExport" class="btn btn-outline btn-block">Export backup</button>
+          <label class="btn btn-outline btn-block backup-import-label">
+            Import backup
+            <input type="file" id="importFile" class="sr-only" accept="application/json,.json" />
+          </label>
+        </div>
       </section>
     </div>
   </main>

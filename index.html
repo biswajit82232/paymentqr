@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#ffffff" />
+  <meta name="theme-color" content="#0f766e" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="application-name" content="Payment QR" />
@@ -13,41 +13,58 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+  <div id="offlineBar" class="offline-bar" hidden role="status">You’re offline — saved settings still work. Connect to update the app.</div>
+  <a href="#qrForm" class="skip-link">Skip to form</a>
   <main class="app">
     <div class="app-inner">
       <nav class="top-nav" aria-label="Main">
-        <span class="top-nav-brand">Payment QR</span>
+        <span class="top-nav-brand"><span class="top-nav-dot" aria-hidden="true"></span> Payment QR</span>
         <a href="settings.html" class="top-nav-link">Settings</a>
       </nav>
 
       <header class="hero hero--compact">
-        <h1 class="hero-title">Payment QR</h1>
+        <h1 class="hero-title">New payment</h1>
+        <p class="hero-sub">Choose account, amount, then show the QR to your customer.</p>
       </header>
 
       <section class="panel" aria-labelledby="qr-heading">
         <div class="panel-head">
-          <h2 id="qr-heading" class="panel-title">Generate</h2>
+          <h2 id="qr-heading" class="panel-title">Details</h2>
         </div>
         <form id="qrForm" class="qr-form" novalidate>
           <div class="form-stack">
-            <label class="field">
-              <span class="field-label">Pay to</span>
-              <select id="selVpa" class="input input-select" name="vpa"></select>
+            <label class="field field--select">
+              <span class="field-label" id="selVpa-label">Pay to</span>
+              <div class="select-wrap">
+                <select id="selVpa" class="input input-select" name="vpa" required aria-labelledby="selVpa-label"></select>
+              </div>
             </label>
             <label class="field">
               <span class="field-label">Amount</span>
               <span class="input-affix">
                 <span class="input-affix__sym" aria-hidden="true">₹</span>
-                <input type="text" id="amount" name="amount" class="input input-affix__input" inputmode="decimal" placeholder="0.00" autocomplete="off" enterkeyhint="done" />
+                <input type="text" id="amount" name="amount" class="input input-affix__input" inputmode="decimal" placeholder="0.00" autocomplete="off" enterkeyhint="done" aria-describedby="amount-hint" />
               </span>
+              <span id="amount-hint" class="field-hint">Numbers only, up to 2 decimal places.</span>
             </label>
+            <div class="quick-wrap">
+              <span class="quick-label" id="quick-label">Quick amount</span>
+              <div class="quick-amounts" role="group" aria-labelledby="quick-label">
+                <button type="button" class="quick-chip" data-amt="100">₹100</button>
+                <button type="button" class="quick-chip" data-amt="200">₹200</button>
+                <button type="button" class="quick-chip" data-amt="500">₹500</button>
+                <button type="button" class="quick-chip" data-amt="1000">₹1k</button>
+                <button type="button" class="quick-chip" data-amt="2000">₹2k</button>
+              </div>
+            </div>
             <label class="field">
               <span class="field-label">Note <span class="field-optional">optional</span></span>
               <input type="text" id="txnNote" name="note" class="input" placeholder="Invoice or item" maxlength="80" enterkeyhint="go" />
             </label>
           </div>
-          <div class="panel-actions">
-            <button type="submit" id="btnGen" class="btn btn-primary btn-block">Create QR code</button>
+          <div class="panel-actions form-actions-row">
+            <button type="button" id="btnClear" class="btn btn-ghost">Clear</button>
+            <button type="submit" id="btnGen" class="btn btn-primary btn-grow">Create QR code</button>
           </div>
         </form>
         <p class="feedback feedback--error" id="err" hidden role="alert"></p>

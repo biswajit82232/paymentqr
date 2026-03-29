@@ -9,6 +9,9 @@
   var errEl = document.getElementById("err");
   var payeeName = document.getElementById("payeeName");
   var payeeSaved = document.getElementById("payeeSaved");
+  var btnExport = document.getElementById("btnExport");
+  var importFile = document.getElementById("importFile");
+  var offlineBar = document.getElementById("offlineBar");
 
   var payeeSaveTimer = null;
   var payeeSnapshot = "";
@@ -16,6 +19,11 @@
   function showErr(msg) {
     errEl.textContent = msg;
     errEl.hidden = !msg;
+  }
+
+  function syncOfflineBar() {
+    if (!offlineBar) return;
+    offlineBar.hidden = navigator.onLine;
   }
 
   function flashSaved() {
@@ -103,6 +111,7 @@
     newLabel.value = "";
     newLabel.focus();
     renderAccounts();
+    B.showToast("Account added");
   });
 
   newVpa.addEventListener("keydown", function (e) {
@@ -112,6 +121,87 @@
     }
   });
 
+  if (btnExport) {
+    btnExport.addEventListener("click", function () {
+      var payload = {
+        version: 1,
+        exportedAt: new Date().toISOString(),
+        app: "Payment QR",
+        payeeName: B.loadPayeeName(),
+        accounts: B.loadAccounts(),
+      };
+      var blob = new Blob([JSON.stringify(payload, null, 2)], {
+        type: "application/json",
+      });
+      var a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "payment-qr-backup.json";
+      a.click();
+      URL.revokeObjectURL(a.href);
+      B.showToast("Backup downloaded");
+    });
+  }
+
+  if (importFile) {
+    importFile.addEventListener("change", function () {
+      var f = importFile.files && importFile.files[0];
+      importFile.value = "";
+      if (!f) return;
+      var reader = new FileReader();
+      reader.onload = function () {
+        try {
+          var data = JSON.parse(reader.result);
+          if (!data || !Array.isArray(data.accounts)) {
+            showErr("Invalid backup file.");
+            return;
+          }
+          if (
+            !confirm(
+              "Replace all saved UPI IDs and payee name with this backup?"
+            )
+          ) {
+            return;
+          }
+          var seen = {};
+          var cleaned = [];
+          for (var i = 0; i < data.accounts.length; i++) {
+            var a = data.accounts[i];
+            if (!a || typeof a.vpa !== "string" || typeof a.label !== "string") {
+              showErr("Backup contains invalid entries.");
+              return;
+            }
+            var v = String(a.vpa).trim().toLowerCase();
+            if (!B.isVpa(v)) {
+              showErr("Backup contains an invalid UPI ID: " + v);
+              return;
+            }
+            if (seen[v]) continue;
+            seen[v] = true;
+            cleaned.push({
+              label: String(a.label).slice(0, 40),
+              vpa: v,
+            });
+          }
+          B.saveAccounts(cleaned);
+          if (data.payeeName && String(data.payeeName).trim()) {
+            B.savePayeeName(data.payeeName);
+          }
+          loadPayeeField();
+          renderAccounts();
+          showErr("");
+          B.showToast("Backup restored");
+        } catch (e) {
+          showErr("Could not read backup file.");
+        }
+      };
+      reader.readAsText(f);
+    });
+  }
+
+  window.addEventListener("online", syncOfflineBar);
+  window.addEventListener("offline", syncOfflineBar);
+
   loadPayeeField();
   renderAccounts();
+  syncOfflineBar();
 })();

@@ -3,8 +3,50 @@
 
   B.STORAGE_ACCOUNTS = "bph_upi_accounts_v1";
   B.STORAGE_PAYEE = "bph_payee_name_v1";
+  B.STORAGE_LAST_FORM = "bph_last_form_v1";
   B.SESSION_QR_KEY = "bph_session_qr_v1";
   B.DEFAULT_PAYEE = "Biswajit Power Hub";
+
+  B.saveLastForm = function (vpa, amount, note) {
+    try {
+      localStorage.setItem(
+        B.STORAGE_LAST_FORM,
+        JSON.stringify({
+          vpa: vpa || "",
+          amount: amount || "",
+          note: note || "",
+        })
+      );
+    } catch (e) {}
+  };
+
+  B.loadLastForm = function () {
+    try {
+      var raw = localStorage.getItem(B.STORAGE_LAST_FORM);
+      if (!raw) return null;
+      return JSON.parse(raw);
+    } catch (e) {
+      return null;
+    }
+  };
+
+  B.showToast = function (message, duration) {
+    var el = document.getElementById("toast");
+    if (!el) {
+      el = document.createElement("div");
+      el.id = "toast";
+      el.className = "toast";
+      el.setAttribute("role", "status");
+      el.setAttribute("aria-live", "polite");
+      document.body.appendChild(el);
+    }
+    el.textContent = message;
+    el.classList.add("toast--visible");
+    clearTimeout(B._toastTimer);
+    B._toastTimer = setTimeout(function () {
+      el.classList.remove("toast--visible");
+    }, duration || 2400);
+  };
 
   B.storeSessionQr = function (payload) {
     try {
