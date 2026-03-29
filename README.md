@@ -15,7 +15,7 @@ Open that URL once **while online** so the service worker can cache files. After
 
 ## Icons
 
-Regenerate placeholder icons:
+App icons are **`icons/icon-192.png`** and **`icons/icon-512.png`** (from your Android launcher set). To regenerate the old placeholder ring icons instead:
 
 ```bash
 npm install
