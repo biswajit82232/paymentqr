@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#ffffff" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="application-name" content="Payment QR" />
+  <title>Payment QR</title>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="app">
+    <div class="app-inner">
+      <nav class="top-nav" aria-label="Main">
+        <span class="top-nav-brand">Payment QR</span>
+        <a href="settings.html" class="top-nav-link">Settings</a>
+      </nav>
+
+      <header class="hero hero--compact">
+        <h1 class="hero-title">Payment QR</h1>
+      </header>
+
+      <section class="panel" aria-labelledby="qr-heading">
+        <div class="panel-head">
+          <h2 id="qr-heading" class="panel-title">Generate</h2>
+        </div>
+        <form id="qrForm" class="qr-form" novalidate>
+          <div class="form-stack">
+            <label class="field">
+              <span class="field-label">Pay to</span>
+              <select id="selVpa" class="input input-select" name="vpa"></select>
+            </label>
+            <label class="field">
+              <span class="field-label">Amount</span>
+              <span class="input-affix">
+                <span class="input-affix__sym" aria-hidden="true">₹</span>
+                <input type="text" id="amount" name="amount" class="input input-affix__input" inputmode="decimal" placeholder="0.00" autocomplete="off" enterkeyhint="done" />
+              </span>
+            </label>
+            <label class="field">
+              <span class="field-label">Note <span class="field-optional">optional</span></span>
+              <input type="text" id="txnNote" name="note" class="input" placeholder="Invoice or item" maxlength="80" enterkeyhint="go" />
+            </label>
+          </div>
+          <div class="panel-actions">
+            <button type="submit" id="btnGen" class="btn btn-primary btn-block">Create QR code</button>
+          </div>
+        </form>
+        <p class="feedback feedback--error" id="err" hidden role="alert"></p>
+      </section>
+    </div>
+  </main>
+  <script src="common.js"></script>
+  <script src="app.js"></script>
+  <script src="pwa.js"></script>
+</body>
+</html>

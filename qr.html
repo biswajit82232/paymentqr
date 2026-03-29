@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#ffffff" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="application-name" content="Payment QR" />
+  <title>Payment QR</title>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="app">
+    <div class="app-inner">
+      <nav class="top-nav top-nav--settings" aria-label="Main">
+        <a href="index.html" class="top-nav-link">← Back</a>
+        <span class="top-nav-title">Payment QR</span>
+        <span class="top-nav-spacer" aria-hidden="true"></span>
+      </nav>
+
+      <div id="qrViewError" class="panel qr-view-error" hidden>
+        <p class="qr-view-error-text">No QR loaded. Create one from the home screen.</p>
+        <a href="index.html" class="btn btn-primary btn-block">Go to Payment QR</a>
+      </div>
+
+      <div id="qrViewMain" class="qr-view-main" hidden>
+        <div class="qr-panel qr-panel--page">
+          <div class="qr-brand-card">
+            <header class="qr-brand-head">
+              <p class="qr-brand-name" id="qrBrandName">Biswajit Power Hub</p>
+              <p class="qr-brand-tag">UPI · Scan to pay</p>
+            </header>
+            <div class="qr-canvas-box">
+              <div id="qrHost" class="qr-host qr-host--show"></div>
+            </div>
+          </div>
+          <p class="qr-caption qr-caption--amount" id="qrMeta" aria-live="polite"></p>
+          <div class="qr-actions">
+            <button type="button" id="btnShare" class="btn btn-outline btn-block btn-dl">Share</button>
+            <button type="button" id="btnDl" class="btn btn-outline btn-block btn-dl">Download PNG</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  <script src="qrcodejs.min.js"></script>
+  <script src="common.js"></script>
+  <script src="qr-page.js"></script>
+  <script src="pwa.js"></script>
+</body>
+</html>
