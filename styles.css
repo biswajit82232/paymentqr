@@ -48,6 +48,7 @@ body {
   background: linear-gradient(165deg, var(--accent-muted) 0%, var(--bg) 42%, var(--bg) 100%);
   background-attachment: fixed;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
 .skip-link {
@@ -123,10 +124,17 @@ body {
 .app {
   display: flex;
   justify-content: center;
-  padding: var(--space-5)
-    max(var(--space-4), env(safe-area-inset-right))
-    var(--space-7)
-    max(var(--space-4), env(safe-area-inset-left));
+  padding-top: calc(var(--space-5) + env(safe-area-inset-top, 0px));
+  padding-right: max(var(--space-4), env(safe-area-inset-right, 0px));
+  padding-bottom: calc(var(--space-7) + env(safe-area-inset-bottom, 0px));
+  padding-left: max(var(--space-4), env(safe-area-inset-left, 0px));
+}
+
+/* Fixed offline bar sits on top of the viewport; push main content below it */
+body:has(#offlineBar:not([hidden])) .app {
+  padding-top: calc(
+    var(--space-5) + env(safe-area-inset-top, 0px) + 2.375rem
+  );
 }
 
 .app-inner {
@@ -601,6 +609,10 @@ body {
   }
 
   .quick-chip {
+    font-size: 16px;
+  }
+
+  .btn {
     font-size: 16px;
   }
 }

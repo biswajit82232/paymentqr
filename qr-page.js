@@ -149,10 +149,32 @@
     if (!composite) return;
 
     var brandName = B.loadPayeeName();
-    var a = document.createElement("a");
-    a.download = downloadName(brandName, data.amount || "upi");
-    a.href = composite.toDataURL("image/png");
-    a.click();
+    var fname = downloadName(brandName, data.amount || "upi");
+
+    composite.toBlob(function (blob) {
+      if (!blob) {
+        try {
+          var a = document.createElement("a");
+          a.download = fname;
+          a.href = composite.toDataURL("image/png");
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+        } catch (e) {}
+        return;
+      }
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement("a");
+      a.download = fname;
+      a.href = url;
+      a.rel = "noopener";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(function () {
+        URL.revokeObjectURL(url);
+      }, 2500);
+    }, "image/png");
   });
 
   if (btnShare) {
